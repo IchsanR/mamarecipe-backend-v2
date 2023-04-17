@@ -7,7 +7,7 @@ const generateToken = (payload) => {
 
 const expiredToken = (payload) => {
 	const token = jwt.sign(payload, process.env.JWT_SECRET, {
-		expiresIn: 5 * 60,
+		expiresIn: 60,
 	});
 	return token;
 };

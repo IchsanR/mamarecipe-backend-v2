@@ -12,15 +12,16 @@ const jwtAuth = (req, res, next) => {
 		if (token) {
 			const decoded = jwt.verify(token, JWT_SECRET);
 			req.decoded = decoded;
+			console.log(decoded);
 			next();
 		} else {
 			res.json({
-				message: "token not found",
+				message: "Token Not Found",
 			});
 		}
 	} catch (error) {
 		if (error.name === "JsonWebTokenError") {
-			next(failedNotFound(res, error.message, "Failed", "token is invalid"));
+			next(failedNotFound(res, error.message, "Failed", "Token is Invalid"));
 		} else if (error.name === "TokenExpiredError") {
 			next(failedExpired(res, error.message, "Failed", "Token is Expired"));
 		} else {

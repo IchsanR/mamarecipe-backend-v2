@@ -11,28 +11,39 @@ CREATE TABLE users(
 
 CREATE TABLE recipe(
   id_recipe UUID primary key,
-  iduser UUID references users(id_user) on delete cascade,
+  id_user UUID,
+  FOREIGN KEY (id_user) references users(id_user) on delete cascade,
   image text,
+  title text,
   ingredients text,
-  video text,
-  title text
+  description text,
+  steps text,
+  view_count integer,
+  liked_count integer,
+  saved_count integer
 );
 
 CREATE TABLE liked(
-  id_liked serial primary key,
-  iduser UUID references users(id_user) on delete cascade,
-  idrecipe UUID references recipe(id_recipe) on delete cascade
+  id_liked serial primary key UNIQUE,
+  id_user UUID,
+  id_recipe UUID,
+  FOREIGN KEY (id_user) references users(id_user) on delete cascade,
+  FOREIGN KEY (id_recipe) references recipe(id_recipe) on delete cascade
 );
 
 CREATE TABLE saved(
-  id_saved serial primary key,
-  iduser UUID references users(id_user) on delete cascade,
-  idrecipe UUID references recipe(id_recipe) on delete cascade
+  id_saved serial primary key UNIQUE,
+  id_user UUID,
+  id_recipe UUID,
+  FOREIGN KEY (id_user) references users(id_user) on delete cascade,
+  FOREIGN KEY (id_recipe) references recipe(id_recipe) on delete cascade
 );
 
 CREATE TABLE comment(
-  id_comment serial primary key,
-  iduser UUID references users(id_user) on delete cascade,
-  idrecipe UUID references recipe(id_recipe) on delete cascade,
+  id_comment serial primary key UNIQUE,
+  id_user UUID,
+  id_recipe UUID,
+  FOREIGN KEY (id_user) references users(id_user) on delete cascade,
+  FOREIGN KEY (id_recipe) references recipe(id_recipe) on delete cascade,
   description text
 );

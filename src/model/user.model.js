@@ -101,11 +101,27 @@ const userModel = {
 			db.query(
 				`UPDATE users SET
 			name = COALESCE ($1, name),
-			email = COALESCE ($2, email),
-			phone = COALESCE ($3, phone),
-			profile_pic = COALESCE ($4, profile_pic)
-			WHERE id_user = $5`,
-				[data.name, data.email, data.phone, data.profile_pic, data.userId]
+			phone = COALESCE ($2, phone)
+			WHERE id_user = $3`,
+				[data.name, data.phone, data.userId]
+			)
+				.then((results) => {
+					resolve(results);
+				})
+				.catch((error) => {
+					reject(error);
+				});
+		});
+	},
+
+	// Update profile pic
+	updatePicture: (data) => {
+		return new Promise((resolve, reject) => {
+			db.query(
+				`UPDATE users SET
+			profile_pic = COALESCE ($1, profile_pic)
+			WHERE id_user = $2`,
+				[data.profile_pic, data.userId]
 			)
 				.then((results) => {
 					resolve(results);

@@ -24,7 +24,7 @@ const userController = {
 					failed(res, error.message, "Failed", "User Gagal Didapatkan");
 				});
 		} catch (error) {
-			failed(res, error.message, "Failed", "Internal Server Error");
+			failed(res, error.message, "Error", "Internal Server Error");
 		}
 	},
 
@@ -43,7 +43,7 @@ const userController = {
 					failed(res, error.message, "Failed", "User Gagal Didapatkan");
 				});
 		} catch (error) {
-			failed(res, error.message, "Failed", "Internal Server Error");
+			failed(res, error.message, "Error", "Internal Server Error");
 		}
 	},
 
@@ -87,7 +87,7 @@ const userController = {
 				}
 			});
 		} catch (error) {
-			failed(res, error.message, "Failed", "Internal Server Error");
+			failed(res, error.message, "Error", "Internal Server Error");
 		}
 	},
 
@@ -125,7 +125,7 @@ const userController = {
 				}
 			});
 		} catch (error) {
-			failed(res, error.message, "Failed", "Internal Server Error");
+			failed(res, error.message, "Error", "Internal Server Error");
 		}
 	},
 
@@ -159,7 +159,54 @@ const userController = {
 					);
 				});
 		} catch (error) {
-			failed(res, null, "Failed", "Internal Server Error");
+			failed(res, null, "Error", "Internal Server Error");
+		}
+	},
+
+	// Update account
+	updateAccount: async (req, res) => {
+		try {
+			const body = req.body;
+			const { userId } = req.decoded;
+			const data = {
+				name: body.name,
+				phone: body.phone,
+				userId,
+			};
+
+			await userModel
+				.updateAccount(data)
+				.then((response) => {
+					success(res, response.rows, "Success", "Update Data Berhasil");
+				})
+				.catch((error) => {
+					failedUpdateData(res, error.message, "Failed", "Data Gagal Diupdate");
+				});
+		} catch (error) {
+			failed(res, error.message, "Error", "Internal Server Error");
+		}
+	},
+
+	// update profile pic
+	updatePicture: async (req, res) => {
+		try {
+			const image = req.file.filename;
+			const { userId } = req.decoded;
+			const data = {
+				profile_pic: image,
+				userId,
+			};
+
+			await userModel
+				.updatePicture(data)
+				.then((response) => {
+					success(res, response.rows, "Success", "Update Data Berhasil");
+				})
+				.catch((error) => {
+					failedUpdateData(res, error.message, "Failed", "Data Gagal Diupdate");
+				});
+		} catch (error) {
+			failed(res, error.message, "Error", "Internal Server Error");
 		}
 	},
 
@@ -205,7 +252,35 @@ const userController = {
 				}
 			});
 		} catch (error) {
-			failed(res, error.message, "Failed", "Internal Server Error");
+			failed(res, error.message, "Error", "Internal Server Error");
+		}
+	},
+
+	// Forget Password
+	forgetPassword: async (req, res) => {
+		try {
+			const { userId } = req.decoded;
+			const password = await hash(req.body.password, 10);
+			const data = {
+				userId,
+				password,
+			};
+
+			userModel
+				.passwordUpdate(data)
+				.then((response) => {
+					success(res, response.rows, "Success", "Password Berhasil Diganti");
+				})
+				.catch((error) => {
+					failedUpdateData(
+						res,
+						error.message,
+						"Failed",
+						"Password Gagal Diupdate"
+					);
+				});
+		} catch (error) {
+			failed(res, null, "Error", "Internal Server Error");
 		}
 	},
 
@@ -223,7 +298,7 @@ const userController = {
 					failedUpdateData(res, error.message, "Failed", "Akun Gagal di Hapus");
 				});
 		} catch (error) {
-			failed(res, error.message, "Failed", "Internal Server Error");
+			failed(res, error.message, "Error", "Internal Server Error");
 		}
 	},
 };
