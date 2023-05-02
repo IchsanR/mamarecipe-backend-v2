@@ -1,9 +1,5 @@
 const jwt = require("jsonwebtoken");
-const {
-	failedNotFound,
-	failed,
-	failedExpired,
-} = require("../helper/file.response");
+const { response } = require("../helper/file.response");
 const { JWT_SECRET } = require("../helper/env");
 
 const jwtAuth = (req, res, next) => {
@@ -12,21 +8,17 @@ const jwtAuth = (req, res, next) => {
 		if (token) {
 			const decoded = jwt.verify(token, JWT_SECRET);
 			req.decoded = decoded;
-			console.log(decoded);
 			next();
 		} else {
-			res.json({
-				message: "Token Not Found",
-			});
+			response(res, 404, null, "Error", "Token Not Found");
 		}
 	} catch (error) {
-		if (error.name === "JsonWebTokenError") {
-			next(failedNotFound(res, error.message, "Failed", "Token is Invalid"));
-		} else if (error.name === "TokenExpiredError") {
-			next(failedExpired(res, error.message, "Failed", "Token is Expired"));
-		} else {
-			next(failed(res, error.message, "Failed", "Internal Server Error"));
-		}
+		if (error.name === "JsonWebTokenError")
+			return response(res, 401, error.message, "Failed", "Token is Invalid");
+		if (error.name === "TokenExpiredError")
+			return response(res, 408, error.message, "Failed", "Token is Expired");
+
+		next(response(res, 500, error.message, "Failed", "Internal Server Error"));
 	}
 };
 

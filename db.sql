@@ -43,7 +43,7 @@ CREATE TABLE comment(
   id_comment serial primary key UNIQUE,
   id_user UUID,
   id_recipe UUID,
+  description text,
   FOREIGN KEY (id_user) references users(id_user) on delete cascade,
-  FOREIGN KEY (id_recipe) references recipe(id_recipe) on delete cascade,
-  description text
+  FOREIGN KEY (id_recipe) references recipe(id_recipe) on delete cascade
 );

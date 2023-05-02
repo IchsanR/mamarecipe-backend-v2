@@ -1,12 +1,7 @@
 const recipeModel = require("../model/recipe.model");
-const {
-	success,
-	failed,
-	failedAddData,
-	failedNotFound,
-	failedUpdateData,
-} = require("../helper/file.response");
+const { response } = require("../helper/file.response");
 const { v4: uuidv4 } = require("uuid");
+const cloudinary = require("../helper/cloudinary.helper");
 
 const recipeController = {
 	// Get All recipe
@@ -14,19 +9,20 @@ const recipeController = {
 		try {
 			await recipeModel
 				.getAllRecipe()
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(
-						res,
-						error.message,
-						"Failed",
-						"Gagal Mendapatkan Data"
-					);
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
@@ -37,19 +33,20 @@ const recipeController = {
 
 			await recipeModel
 				.getRecipeById(recipeId)
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(
-						res,
-						error.message,
-						"Failed",
-						"Gagal Mendapatkan Data"
-					);
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
@@ -74,19 +71,20 @@ const recipeController = {
 
 			await recipeModel
 				.searchRecipe(data)
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(
-						res,
-						error.message,
-						"Failed",
-						"Gagal Mendapatkan Data"
-					);
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
@@ -95,83 +93,92 @@ const recipeController = {
 		try {
 			await recipeModel
 				.mostViewRecipe()
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(
-						res,
-						error.message,
-						"Failed",
-						"Gagal Mendapatkan Data"
-					);
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
 	// Get user recipe
 	getUserRecipe: async (req, res) => {
 		try {
-			const { userId } = req.decoded;
+			const { userId } = req.params;
 
 			await recipeModel
 				.getUserRecipe(userId)
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(res, error, "Failed", "Gagal Mendapatkan Data");
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
 	// Get user liked recipe
 	getUserLiked: async (req, res) => {
 		try {
-			const { userId } = req.decoded;
+			const { userId } = req.params;
 
 			await recipeModel
 				.userLiked(userId)
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(
-						res,
-						error.message,
-						"Failed",
-						"Gagal Mendapatkan Data"
-					);
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
 	// Get user saved recipe
 	getUserSaved: async (req, res) => {
 		try {
-			const { userId } = req.decoded;
+			const { userId } = req.params;
 
 			await recipeModel
 				.userSaved(userId)
-				.then((response) => {
-					success(res, response.rows, "Success", "Berhasil Mendapatkan Resep");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Mendapatkan Resep"
+					);
 				})
 				.catch((error) => {
-					failedNotFound(
-						res,
-						error.message,
-						"Failed",
-						"Gagal Mendapatkan Data"
-					);
+					response(res, 404, error, "Failed", "Gagal Mendapatkan Data");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
@@ -180,12 +187,12 @@ const recipeController = {
 		try {
 			const recipeId = uuidv4();
 			const { userId } = req.decoded;
-			const image = req.file.filename;
+			const image = await cloudinary.uploader.upload(req.file.path);
 			const { title, description, ingredients, steps } = req.body;
 			const data = {
 				recipeId,
 				userId,
-				image,
+				image: `${image.secure_url}|&&|${image.url}`,
 				title,
 				description,
 				ingredients,
@@ -197,78 +204,214 @@ const recipeController = {
 
 			await recipeModel
 				.addRecipe(data)
-				.then((response) => {
-					success(res, response.rows, "Success", "Resep Berhasil Ditambahkan");
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Resep Berhasil Ditambahkan"
+					);
 				})
 				.catch((error) => {
-					failedAddData(
-						res,
-						error.message,
-						"Failed",
-						"Resep Gagal Ditambahkan"
-					);
+					response(res, 422, error, "Failed", "Resep Gagal Ditambahkan");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
-	// Update recipe
-	updateRecipe: async (req, res) => {
+	// // Update recipe
+	// updateRecipe: async (req, res) => {
+	// 	try {
+	// 		const { recipeId } = req.params;
+	// 		const { title, description, ingredients, steps } = req.body;
+	// 		const data = {
+	// 			title,
+	// 			description,
+	// 			ingredients,
+	// 			steps,
+	// 			recipeId,
+	// 		};
+
+	// 		await recipeModel
+	// 			.updateRecipe(data)
+	// 			.then((result) => {
+	// 				response(res, 200, result.rows, "Success", "Resep Berhasil Diupdate");
+	// 			})
+	// 			.catch((error) => {
+	// 				response(res, 409, error, "Failed", "Resep Gagal Diupdate");
+	// 			});
+	// 	} catch (error) {
+	// 		response(res, 500, error, "Error", "Internal Server Error");
+	// 	}
+	// },
+
+	// // Update Recipe Image
+	// updateRecipeImage: async (req, res) => {
+	// 	try {
+	// 		const { userId } = req.decoded;
+	// 		const image = req.file.filename;
+	// 		const data = {
+	// 			userId,
+	// 			image,
+	// 		};
+
+	// 		await recipeModel
+	// 			.updateImage(data)
+	// 			.then((result) => {
+	// 				response(res, 200, result.rows, "Success", "Resep Berhasil Diupdate");
+	// 			})
+	// 			.catch((error) => {
+	// 				response(res, 409, error, "Failed", "Resep Gagal Diupdate");
+	// 			});
+	// 	} catch (error) {
+	// 		response(res, 500, error, "Error", "Internal Server Error");
+	// 	}
+	// },
+
+	// View count
+	viewCount: async (req, res) => {
 		try {
 			const { recipeId } = req.params;
-			const { title, description, ingredients, steps } = req.body;
+
+			await recipeModel
+				.viewCount(recipeId)
+				.then((result) => {
+					response(res, 200, result.rows, "Success", "View Bertambah");
+				})
+				.catch((error) => {
+					response(res, 409, error, "Failed", "Update View Error");
+				});
+		} catch (error) {
+			response(res, 500, error, "Error", "Internal Server Error");
+		}
+	},
+
+	// Delete Recipe
+	deleteRecipe: async (req, res) => {
+		try {
+			const { recipeId } = req.params;
+
+			await recipeModel
+				.deleteRecipe(recipeId)
+				.then((result) => {
+					response(
+						res,
+						200,
+						result.rows,
+						"Success",
+						"Berhasil Menghapus Resep"
+					);
+				})
+				.catch((error) => {
+					response(res, 409, error, "Failed", "Gagal Menghapus Resep");
+				});
+		} catch (error) {
+			response(res, 500, error, "Error", "Internal Server Error");
+		}
+	},
+
+	// Add user liked
+	addLikedRecipe: async (req, res) => {
+		try {
+			const { userId } = req.decoded;
+			const { recipeId } = req.params;
 			const data = {
-				title,
-				description,
-				ingredients,
-				steps,
+				userId,
 				recipeId,
 			};
 
-			await recipeModel
-				.updateRecipe(data)
-				.then((response) => {
-					success(res, response.rows, "Success", "Resep Berhasil Diupdate");
-				})
-				.catch((error) => {
-					failedUpdateData(
-						res,
-						error.message,
-						"Failed",
-						"Resep Gagal Diupdate"
-					);
-				});
+			await recipeModel.checkUserLike(data).then((result) => {
+				if (result.rowCount === 0) {
+					recipeModel
+						.addLikedRecipe(data)
+						.then((result) => {
+							recipeModel.likedCountIncr(recipeId);
+							response(res, 200, result.rows, "Succes", "Berhasil Like Resep");
+						})
+						.catch((error) => {
+							response(res, 422, error, "Failed", "Tidak Berhasil Like Resep");
+						});
+				} else {
+					response(res, 409, null, "Failed", "Resep Sudah Di Like");
+				}
+			});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 
-	// Update Recipe Image
-	updateRecipeImage: async (req, res) => {
+	//Remove like
+	removeLikedRecipe: async (req, res) => {
 		try {
-			const { userId } = req.decoded;
-			const image = req.file.filename;
-			const data = {
-				userId,
-				image,
-			};
+			const { recipeId } = req.params;
 
 			await recipeModel
-				.updateImage(data)
-				.then((response) => {
-					success(res, response.rows, "Success", "Resep Berhasil Diupdate");
+				.removeUserLiked(recipeId)
+				.then((result) => {
+					recipeModel.likedCountDecr(recipeId);
+					response(res, 200, result.rows, "Success", "Berhasil di Unlike");
 				})
 				.catch((error) => {
-					failedUpdateData(
-						res,
-						error.message,
-						"Failed",
-						"Resep Gagal Diupdate"
-					);
+					response(res, 409, error, "Failed", "Resep Gagal di Unlike");
 				});
 		} catch (error) {
-			failed(res, error.message, "Error", "Internal Server Error");
+			response(res, 500, error, "Error", "Internal Server Error");
+		}
+	},
+
+	addSavedRecipe: async (req, res) => {
+		try {
+			const { userId } = req.decoded;
+			const { recipeId } = req.params;
+			const data = {
+				userId,
+				recipeId,
+			};
+
+			await recipeModel.checkUserSaved(data).then((result) => {
+				if (result.rowCount === 0) {
+					recipeModel
+						.addSavedRecipe(data)
+						.then((result) => {
+							recipeModel.savedCountIncr(recipeId);
+							response(
+								res,
+								200,
+								result.rows,
+								"Success",
+								"Resep Berhasil Disimpan"
+							);
+						})
+						.catch((error) => {
+							response(res, 422, error, "Failed", "Resep Gagal Disimpan");
+						});
+				} else {
+					response(res, 409, null, "Failed", "Resep Sudah Pernah Disimpan");
+				}
+			});
+		} catch (error) {
+			response(res, 500, error, "Error", "Internal Server Error");
+		}
+	},
+
+	// Remove user saved
+	removeSavedRecipe: async (req, res) => {
+		try {
+			const { recipeId } = req.params;
+
+			await recipeModel
+				.removeUserSaved(recipeId)
+				.then((result) => {
+					recipeModel.savedCountDecr(recipeId);
+					response(res, 200, result.rows, "Success", "Berhasil di Unsaved");
+				})
+				.catch((error) => {
+					response(res, 409, error, "Failed", "Gagal Unsaved Recipe");
+				});
+		} catch (error) {
+			response(res, 500, error, "Error", "Internal Server Error");
 		}
 	},
 };

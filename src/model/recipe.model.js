@@ -17,7 +17,9 @@ const recipeModel = {
 	// Get Recipe by id
 	getRecipeById: (recipeId) => {
 		return new Promise((resolve, reject) => {
-			db.query(`SELECT * FROM recipe WHERE id_recipe = '${recipeId}'`)
+			db.query(
+				`SELECT recipe.*, users.name AS uploader FROM recipe JOIN users ON recipe.id_user = users.id_user WHERE id_recipe = '${recipeId}'`
+			)
 				.then((result) => {
 					resolve(result);
 				})
@@ -45,7 +47,7 @@ const recipeModel = {
 	// Get most viewed recipe
 	mostViewRecipe: () => {
 		return new Promise((resolve, reject) => {
-			db.query(`SELECT * FROM recipe ORDER BY view_count ASC LIMIT 6`)
+			db.query(`SELECT * FROM recipe ORDER BY view_count DESC LIMIT 6`)
 				.then((result) => {
 					resolve(result);
 				})
@@ -72,7 +74,7 @@ const recipeModel = {
 	userLiked: (userId) => {
 		return new Promise((resolve, reject) => {
 			db.query(
-				`SELECT recipe.* FROM liked JOIN recipe ON liked.id_recipe = recipe.id_recipe JOIN users ON liked.id_user = users.id_user WHERE id_user = '${userId}'`
+				`SELECT recipe.* FROM liked JOIN recipe ON liked.id_recipe = recipe.id_recipe JOIN users ON liked.id_user = users.id_user WHERE liked.id_user = '${userId}'`
 			)
 				.then((result) => {
 					resolve(result);
@@ -87,7 +89,7 @@ const recipeModel = {
 	userSaved: (userId) => {
 		return new Promise((resolve, reject) => {
 			db.query(
-				`SELECT recipe.* FROM saved JOIN recipe ON saved.id_recipe = recipe.id_recipe JOIN users ON saved.id_user = users.id_user WHERE id_user = '${userId}'`
+				`SELECT recipe.* FROM saved JOIN recipe ON saved.id_recipe = recipe.id_recipe JOIN users ON saved.id_user = users.id_user WHERE saved.id_user = '${userId}'`
 			)
 				.then((result) => {
 					resolve(result);
@@ -127,47 +129,47 @@ const recipeModel = {
 		});
 	},
 
-	// Update recipe
-	updateRecipe: (data) => {
-		return new Promise((resolve, reject) => {
-			db.query(
-				`UPDATE recipe SET
-			title = COALESCE ($1, title),
-			description = COALESCE ($2, description),
-			ingredients = COALESCE ($3, ingredients),
-			steps = COALESCE ($4, steps)
-			WHERE id_recipe = $5`,
-				[
-					data.title,
-					data.description,
-					data.ingredients,
-					data.steps,
-					data.recipeId,
-				]
-			)
-				.then((result) => {
-					resolve(result);
-				})
-				.catch((error) => {
-					reject(error);
-				});
-		});
-	},
+	// // Update recipe
+	// updateRecipe: (data) => {
+	// 	return new Promise((resolve, reject) => {
+	// 		db.query(
+	// 			`UPDATE recipe SET
+	// 		title = COALESCE ($1, title),
+	// 		description = COALESCE ($2, description),
+	// 		ingredients = COALESCE ($3, ingredients),
+	// 		steps = COALESCE ($4, steps)
+	// 		WHERE id_recipe = $5`,
+	// 			[
+	// 				data.title,
+	// 				data.description,
+	// 				data.ingredients,
+	// 				data.steps,
+	// 				data.recipeId,
+	// 			]
+	// 		)
+	// 			.then((result) => {
+	// 				resolve(result);
+	// 			})
+	// 			.catch((error) => {
+	// 				reject(error);
+	// 			});
+	// 	});
+	// },
 
-	// Update recipe image
-	updateImage: (data) => {
-		return new Promise((resolve, reject) => {
-			db.query(
-				`UPDATE recipe SET image = '${data.image}' WHERE id_recipe = '${data.recipeId}'`
-			)
-				.then((result) => {
-					resolve(result);
-				})
-				.catch((error) => {
-					reject(error);
-				});
-		});
-	},
+	// // Update recipe image
+	// updateImage: (data) => {
+	// 	return new Promise((resolve, reject) => {
+	// 		db.query(
+	// 			`UPDATE recipe SET image = '${data.image}' WHERE id_recipe = '${data.recipeId}'`
+	// 		)
+	// 			.then((result) => {
+	// 				resolve(result);
+	// 			})
+	// 			.catch((error) => {
+	// 				reject(error);
+	// 			});
+	// 	});
+	// },
 
 	// view count
 	viewCount: (recipeId) => {
@@ -263,7 +265,7 @@ const recipeModel = {
 			db.query(
 				`INSERT INTO liked (id_user, id_recipe)
 			VALUES
-			(${data.userId}, ${data.recipeId})`
+			('${data.userId}', '${data.recipeId}')`
 			)
 				.then((result) => {
 					resolve(result);
@@ -308,7 +310,7 @@ const recipeModel = {
 			db.query(
 				`INSERT INTO saved (id_user, id_recipe)
 			VALUES
-			(${data.userId}, ${data.recipeId})`
+			('${data.userId}', '${data.recipeId}')`
 			)
 				.then((result) => {
 					resolve(result);
