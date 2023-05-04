@@ -41,7 +41,6 @@ const commentControler = {
 				ms: milisecond,
 			};
 
-			console.log(date, milisecond);
 			await commentModel
 				.addRecipeComment(data)
 				.then((result) => {
@@ -63,7 +62,7 @@ const commentControler = {
 
 	deleteRecipeComment: async (req, res) => {
 		try {
-			const commentId = req.params.id_comment;
+			const { commentId } = req.params;
 
 			await commentModel
 				.deleteRecipeComment(commentId)
