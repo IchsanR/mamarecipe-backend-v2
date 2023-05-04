@@ -23,7 +23,13 @@ const commentModel = {
 				`INSERT INTO comment
       (id_user, id_recipe, description, upload_time, ms)
       VALUES ($1, $2, $3, $4, $5)`,
-				[data.userId, data.recipeId, data.description, data.upload_time, ms]
+				[
+					data.userId,
+					data.recipeId,
+					data.description,
+					data.upload_time,
+					data.ms,
+				]
 			)
 				.then((result) => {
 					resolve(result);
