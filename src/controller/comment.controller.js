@@ -31,10 +31,14 @@ const commentControler = {
 			const { userId } = req.decoded;
 			const { recipeId } = req.params;
 			const { description } = req.body;
+			const date = new Date();
+			const milisecond = new Date.now();
 			const data = {
 				userId,
 				recipeId,
 				description,
+				upload_time: date,
+				ms: milisecond,
 			};
 
 			await commentModel

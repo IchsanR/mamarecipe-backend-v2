@@ -44,6 +44,8 @@ CREATE TABLE comment(
   id_user UUID,
   id_recipe UUID,
   description text,
+  upload_time text,
+  ms text,
   FOREIGN KEY (id_user) references users(id_user) on delete cascade,
   FOREIGN KEY (id_recipe) references recipe(id_recipe) on delete cascade
 );
