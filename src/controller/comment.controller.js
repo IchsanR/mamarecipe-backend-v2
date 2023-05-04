@@ -31,8 +31,8 @@ const commentControler = {
 			const { userId } = req.decoded;
 			const { recipeId } = req.params;
 			const { description } = req.body;
-			const date = new Date();
-			const milisecond = new Date.now();
+			const date = Date();
+			const milisecond = Date.now();
 			const data = {
 				userId,
 				recipeId,
@@ -41,6 +41,7 @@ const commentControler = {
 				ms: milisecond,
 			};
 
+			console.log(date, milisecond);
 			await commentModel
 				.addRecipeComment(data)
 				.then((result) => {

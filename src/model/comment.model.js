@@ -5,7 +5,7 @@ const commentModel = {
 	getRecipeComment: (recipeId) => {
 		return new Promise((resolve, reject) => {
 			db.query(
-				`SELECT comment.id_comment, comment.description, users.id_user, users.name AS user_name, users.profile_pic FROM comment JOIN users ON comment.id_user = users.id_user WHERE id_recipe = '${recipeId}' ORDER BY comment.ms DESC`
+				`SELECT comment.*, users.id_user, users.name AS user_name, users.profile_pic FROM comment JOIN users ON comment.id_user = users.id_user WHERE id_recipe = '${recipeId}' ORDER BY comment.ms ASC`
 			)
 				.then((result) => {
 					resolve(result);
