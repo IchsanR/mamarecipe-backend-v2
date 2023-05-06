@@ -23,7 +23,7 @@ const recipeRouter = express.Router();
 recipeRouter
 	.get("/recipe", getAllRecipe) //Get all recipe
 	.get("/recipe/:recipeId", getDetailRecipe) //Get detail recipe
-	.get("/recipe/search", searchRecipe) //Search Recipe
+	.get("/recipes/search", searchRecipe) //Search Recipe
 	.get("/mostview", mostViewRecipe) //Most view recipe
 	.get("/recipe/user/:userId", getUserRecipe) //Get user recipe
 	.get("/recipe/user/:userId/liked", getUserLiked) //Get user liked recipe
