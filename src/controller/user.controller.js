@@ -17,15 +17,17 @@ const userController = {
 						res,
 						200,
 						result.rows,
-						"Success",
-						"User Berhasil Didapatkan"
+						"success",
+						"success get user"
 					);
 				})
 				.catch((error) => {
-					response(res, 404, error, "Failed", "User Gagal Didapatkan");
+					res.status(404);
+					response(res, 404, null, "failed", "user not found");
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -42,15 +44,17 @@ const userController = {
 						res,
 						200,
 						result.rows,
-						"Success",
-						"User Berhasil Didapatkan"
+						"success",
+						"success get user"
 					);
 				})
 				.catch((error) => {
-					response(res, 404, error, "Failed", "User Gagal Didapatkan");
+					res.status(404);
+					response(res, 404, null, "failed", "user not found");
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -78,19 +82,22 @@ const userController = {
 								res,
 								200,
 								result.rows,
-								"Success",
-								"Akun Berhasil Didaftarkan"
+								"success",
+								"register account success"
 							);
 						})
 						.catch((error) => {
-							response(res, 422, error, "Failed", "Gagal Registrasi Akun");
+							res.status(422);
+							response(res, 422, null, "failed", "register failed");
 						});
 				} else {
-					response(res, 409, null, "Failed", "Email Telah Terdaftar");
+					res.status(409);
+					response(res, 409, null, "failed", "email has been registered");
 				}
 			});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -117,19 +124,22 @@ const userController = {
 									token,
 									user,
 								},
-								"Success",
-								"Login Berhasil"
+								"success",
+								"login success"
 							);
 						} else {
-							response(res, 404, null, "Failed", "Email dan Password Salah");
+							res.status(401);
+							response(res, 401, null, "failed", "invalid credentials");
 						}
 					});
 				} else {
-					response(res, 404, null, "Failed", "Email dan Password Salah");
+					res.status(401);
+					response(res, 401, null, "failed", "invalid credentials");
 				}
 			});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -152,19 +162,21 @@ const userController = {
 					});
 
 					delete user.password;
-					response(res, 200, token, "Success", "User ditemukan");
+					response(res, 200, token, "success", "get user success");
 				})
 				.catch((error) => {
+					res.status(404);
 					response(
 						res,
 						404,
-						error,
-						"Failed",
-						"Periksa Kembali Email dan No. Telpon"
+						null,
+						"failed",
+						"user not found"
 					);
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -182,13 +194,15 @@ const userController = {
 			await userModel
 				.updateAccount(data)
 				.then((result) => {
-					response(res, 200, result.rows, "Success", "Update Data Berhasil");
+					response(res, 200, result.rows, "success", "data updated");
 				})
 				.catch((error) => {
-					response(res, 409, error, "Failed", "Data Gagal Diupdate");
+					res.status(409);
+					response(res, 409, null, "failed", "update failed");
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -205,13 +219,15 @@ const userController = {
 			await userModel
 				.updatePicture(data)
 				.then((result) => {
-					response(res, 200, result.rows, "Success", "Update Data Berhasil");
+					response(res, 200, result.rows, "success", "data updated");
 				})
 				.catch((error) => {
-					response(res, 409, error, "Failed", "Data Gagal Diupdate");
+					res.status(409);
+					response(res, 409, null, "failed", "update failed");
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -237,23 +253,27 @@ const userController = {
 										res,
 										200,
 										result.rows,
-										"Success",
-										"Password Berhasil di Update"
+										"success",
+										"password updated"
 									);
 								})
 								.catch((error) => {
-									response(res, 409, error, "Failed", "Password Gagal diganti");
+									res.status(500);
+									response(res, 500, null, "failed", "update failed");
 								});
 						} else {
-							response(res, 404, null, "Failed", "Password Lama Tidak Sesuai");
+							res.status(409);
+							response(res, 409, null, "failed", "password not match");
 						}
 					});
 				} else {
-					response(res, 404, null, "Failed", "Email Tidak Terdaftar");
+					res.status(404);
+					response(res, 404, null, "failed", "user not found");
 				}
 			});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "error", "internal server error");
 		}
 	},
 
@@ -274,15 +294,16 @@ const userController = {
 						res,
 						200,
 						result.rows,
-						"Success",
-						"Password Berhasil Diganti"
+						"success",
+						"password updated"
 					);
 				})
 				.catch((error) => {
-					response(res, 409, error, "Failed", "Password Gagal Diupdate");
+					res.status(500);
+					response(res, 500, null, "failed", "update failed");
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			response(res, 500, error, "error", "internal server error");
 		}
 	},
 
@@ -294,13 +315,15 @@ const userController = {
 			await userModel
 				.deleteAccount(userId)
 				.then((result) => {
-					response(res, 200, result.rows, "Success", "Akun Berhasil di Hapus");
+					response(res, 200, result.rows, "success", "account deleted");
 				})
 				.catch((error) => {
-					response(res, 409, error, "Failed", "Akun Gagal di Hapus");
+					res.status(500);
+					response(res, 500, null, "failed", "delete failed");
 				});
 		} catch (error) {
-			response(res, 500, error, "Error", "Internal Server Error");
+			res.status(500);
+			response(res, 500, null, "Error", "internal server error");
 		}
 	},
 };
